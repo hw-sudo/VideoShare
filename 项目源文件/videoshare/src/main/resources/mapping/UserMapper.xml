@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cdu.videoshare.mapper.UserMapper">
+    <insert id="add" parameterType="User">
+        insert into wn_user(account,password,email,reg_time,video_num,score,status) values(#{account},#{password},#{email},#{reg_time},#{video_num},#{score},#{status})
+    </insert>
+
+    <select id="getByAccount" resultType="User">
+        select * from wn_user where account=#{account}
+    </select>
+
+    <select id="getByAccountAndPwd" resultType="User">
+        select * from wn_user where account=#{account} and password=#{password}
+    </select>
+
+    <update id="updateVideoNum">
+        update wn_user set video_num=video_num+#{num} where id=#{id}
+    </update>
+
+    <select id="getAll" resultType="User">
+        select * from wn_user
+    </select>
+
+</mapper>

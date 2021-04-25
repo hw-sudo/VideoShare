@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cdu.videoshare.mapper.FavorMapper">
+
+    <insert id="add" parameterType="Favor">
+        insert into wn_favor(video_id,user_id,favor_time) values(#{video_id},#{user_id},#{favor_time})
+    </insert>
+
+    <insert id="addPraise" parameterType="Praise">
+        insert into wn_praise(video_id,user_id,praise_time) values(#{video_id},#{user_id},#{praise_time})
+    </insert>
+
+    <select id="searchByUserId" resultType="Favor">
+        select * from wn_favor where user_id=#{id} and video_id=#{id2}
+    </select>
+
+    <select id="getByUserId" resultType="Praise">
+        select * from wn_praise where user_id=#{id} and video_id=#{id2}
+    </select>
+
+
+</mapper>

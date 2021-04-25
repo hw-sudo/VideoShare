@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cdu.videoshare.mapper.VideoMapper">
+
+    <select id="getAll" resultMap="videoResultMap" parameterType="VideoQueryCondition">
+    select v.*,u.account,c.name
+    from wn_video v,wn_user u,wn_category c
+    where v.user_id=u.id and v.category_id=c.id
+        <if test="categoryId != null and categoryId != 0 ">
+            and v.category_id=#{categoryId}
+        </if>
+        <if test="title !=null and title  !='' ">
+            and title=#{title}
+        </if>
+        <if test="startTime != null and startTime !='' ">
+            and pub_time >= #{startTime}
+        </if>
+        <if test="endTime != null and endTime !='' ">
+            <![CDATA[
+            and pub_time <= #{endTime}
+            ]]>
+        </if>
+    </select>
+
+    <resultMap id="videoResultMap" type="Video">
+        <id column="id" property="id"/>
+        <id column="title" property="title"/>
+        <id column="url" property="url"/>
+        <id column="category_id" property="category.id"/>
+        <id column="name" property="category.name"/>
+        <id column="pub_time" property="pubTime"/>
+        <id column="account" property="user.account"/>
+        <id column="view_num" property="viewNum"/>
+        <id column="praise_num" property="praiseNum"/>
+        <id column="status" property="status"/>
+    </resultMap>
+
+    <select id="getById" resultType="Video">
+        select * from wn_video where id=#{id}
+    </select>
+
+    <insert id="add" parameterType="Video">
+        insert into
+        wn_video(title,cover,url,user_id,category_id,pub_time,view_num,praise_num,status)
+        values(#{title},#{cover},#{url},#{user.id},#{category.id},#{pubTime},#{viewNum},#{praiseNum},#{status})
+    </insert>
+
+    <select id="getViewByUserId" resultType="View">
+        select a.*,b.title from wn_view a,wn_video b
+        where a.user_id=#{id} and a.video_id=b.id
+    </select>
+
+    <insert id="addView" parameterType="View">
+        insert into wn_view(video_id,user_id,view_time)
+        values(#{video_id},#{user_id},#{view_time})
+    </insert>
+
+    <select id="getVideoByUserId" resultType="Video">
+        select * from wn_video
+        where user_id=#{id}
+    </select>
+
+    <update id="updateViewNum">
+        update wn_video set view_num=view_num+#{view_num} where id=#{id}
+    </update>
+
+    <select id="getByUserId" resultType="Video">
+        select v.* from wn_video v,wn_favor f where v.id=f.video_id and f.user_id=#{id}
+    </select>
+
+    <select id="getByUserId2" resultType="Video">
+        select v.* from wn_video v,wn_praise p where v.id=p.video_id and p.user_id=#{id}
+    </select>
+
+</mapper>
+
